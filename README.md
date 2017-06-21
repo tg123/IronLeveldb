@@ -1,9 +1,11 @@
 # IronLeveldb
 
+[![NuGet version](https://badge.fury.io/nu/IronLeveldb.svg)](https://badge.fury.io/nu/IronLeveldb)
+
 A leveldb implementation in C#, targeting .NET Standard 1.3 (Frameworks 4.6+, Core 1.0+).
 
- *This project is still under hard working and was built to read leveldb file on Azure Blob Storage originally,
- As a result, only partial of READ functions were implemented at the moment.*
+ *This project is still under hard working and was built to read leveldb instances on Azure Blob Storage originally,
+ thus, only partial of READ functions were implemented at the moment.*
  
 ## Build the project
  
@@ -21,6 +23,11 @@ A leveldb implementation in C#, targeting .NET Standard 1.3 (Frameworks 4.6+, Co
  ```
 
 ## How to use
+
+ * Install 
+   ```
+   Install-Package IronLeveldb -Pre 
+   ```
 
  * Open a local directory
  
