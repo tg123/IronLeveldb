@@ -1,6 +1,7 @@
 # IronLeveldb
 
 [![NuGet version](https://badge.fury.io/nu/IronLeveldb.svg)](https://badge.fury.io/nu/IronLeveldb)
+![VSTS](https://farmer1992.visualstudio.com/_apis/public/build/definitions/3686302e-40e0-495b-a6f8-f2926767661b/7/badge)
 
 A leveldb implementation in C#, targeting .NET Standard 1.3 (Frameworks 4.6+, Core 1.0+).
 
