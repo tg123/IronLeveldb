@@ -3,6 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Authors>Boshi Lian</Authors>
+    <Company />
+    <Product />
+    <Description>A leveldb implementation in C#</Description>
+    <PackageLicenseUrl>https://github.com/tg123/IronLeveldb/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/tg123/IronLeveldb</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/tg123/IronLeveldb</RepositoryUrl>
+    <PackageTags>leveldb azure blob</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
