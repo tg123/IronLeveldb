@@ -29,12 +29,12 @@ namespace IronLevelDB.Storages.Azure
                 throw new InvalidDataException("bad CURRENT file");
             }
 
-            return _folders[0].GetBlockBlobReference(current).OpenWriteAsync().Result;
+            return _folders[0].GetBlockBlobReference(current).OpenReadAsync().Result;
         }
 
         public Stream GetDescriptorContentById(ulong num)
         {
-            return _folders[0].GetBlockBlobReference(FileNameMaker.DescriptorFileName(num)).OpenWriteAsync().Result;
+            return _folders[0].GetBlockBlobReference(FileNameMaker.DescriptorFileName(num)).OpenReadAsync().Result;
         }
 
         public IContentReader GetTableContentById(ulong num)
