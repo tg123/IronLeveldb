@@ -2,7 +2,7 @@
 
 namespace IronLevelDB
 {
-    public interface IKeyComparer : IComparer<byte[]>
+    public interface IKeyComparer : IComparer<IReadOnlyList<byte>>
     {
         // TODO Name
         // string Name { get; }

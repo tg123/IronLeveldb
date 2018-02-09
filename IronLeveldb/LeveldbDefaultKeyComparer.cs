@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace IronLevelDB
 {
@@ -6,7 +7,7 @@ namespace IronLevelDB
     {
         public static readonly IKeyComparer Comparer = new LeveldbDefaultKeyComparer();
 
-        public int Compare(byte[] a, byte[] b)
+        public int Compare(IReadOnlyList<byte> a, IReadOnlyList<byte> b)
         {
 //            const size_t min_len = (size_ < b.size_) ? size_ : b.size_;
 //            int r = memcmp(data_, b.data_, min_len);
@@ -22,16 +23,16 @@ namespace IronLevelDB
                 throw new NullReferenceException("cannot compare null");
             }
 
-            var minLen = Math.Min(a.Length, b.Length);
+            var minLen = Math.Min(a.Count, b.Count);
             var r = Memcmp(a, b, minLen);
 
             if (r == 0)
             {
-                if (a.Length < b.Length)
+                if (a.Count < b.Count)
                 {
                     r = -1;
                 }
-                else if (a.Length > b.Length)
+                else if (a.Count > b.Count)
                 {
                     r = +1;
                 }
@@ -42,7 +43,7 @@ namespace IronLevelDB
 
         // why .net does not have this built-in
         // rewrite from http://research.microsoft.com/en-us/um/redmond/projects/invisible/src/crt/memcmp.c.htm
-        private static int Memcmp(byte[] a, byte[] b, int count)
+        private static int Memcmp(IReadOnlyList<byte> a, IReadOnlyList<byte> b, int count)
         {
             var v = 0;
 
