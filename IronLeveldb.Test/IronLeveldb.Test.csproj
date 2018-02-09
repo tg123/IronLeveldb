@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="LevelDB.Net" Version="1.2.1" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="1.0.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.2.0" />
   </ItemGroup>
