@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronLevelDB.DB;
 
 namespace IronLevelDB
@@ -23,14 +24,14 @@ namespace IronLevelDB
             _onDispose?.Invoke();
         }
 
-        public IEnumerable<IByteArrayKeyValuePair> Seek(byte[] key)
+        public IEnumerable<IReadonlyBytesKeyValuePair> Seek(IReadOnlyList<byte> key)
         {
             // TODO snapshot is not support, use ulong.MaxValue (smallest) instead
-            var interkey = new InternalKey(key, InternalKey.MaxSequenceNumber, InternalKey.ValueTypeForSeek);
+            var interkey = new InternalKey(key.ToArray(), InternalKey.MaxSequenceNumber, InternalKey.ValueTypeForSeek);
             return _dataProvider.Seek(interkey).FilterDeleted(_options.Comparer);
         }
 
-        public IEnumerable<IByteArrayKeyValuePair> SeekFirst()
+        public IEnumerable<IReadonlyBytesKeyValuePair> SeekFirst()
         {
             return _dataProvider.SeekFirst().FilterDeleted(_options.Comparer);
         }

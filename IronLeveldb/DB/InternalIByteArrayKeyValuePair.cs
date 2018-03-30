@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 
 namespace IronLevelDB.DB
 {
-    internal class InternalIByteArrayKeyValuePair : IByteArrayKeyValuePair
+    internal class InternalIByteArrayKeyValuePair : IByteArrayKeyValuePair, IReadonlyBytesKeyValuePair
     {
         private readonly IByteArrayKeyValuePair _real;
 
@@ -19,5 +20,10 @@ namespace IronLevelDB.DB
         public byte[] Key => InternalKey.UserKey;
 
         public byte[] Value => _real.Value;
+
+        IReadOnlyList<byte> IKeyValuePair<IReadOnlyList<byte>, IReadOnlyList<byte>>.Value => _real.Value;
+
+        IReadOnlyList<byte> IKeyValuePair<IReadOnlyList<byte>, IReadOnlyList<byte>>.Key => InternalKey.UserKey;
+
     }
 }

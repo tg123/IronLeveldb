@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <VersionPrefix>1.1.0</VersionPrefix>
     <TargetFramework>netstandard1.3</TargetFramework>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Authors>Boshi Lian</Authors>

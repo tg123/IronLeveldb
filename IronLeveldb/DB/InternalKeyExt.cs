@@ -6,7 +6,7 @@ namespace IronLevelDB.DB
 {
     internal static class InternalKeyExt
     {
-        public static IEnumerable<IByteArrayKeyValuePair> FilterDeleted(
+        internal static IEnumerable<InternalIByteArrayKeyValuePair> FilterDeleted(
             this IEnumerable<InternalIByteArrayKeyValuePair> internalkvs, IKeyComparer comparer)
         {
             byte[] lastkey = null;
