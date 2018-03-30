@@ -1,4 +1,4 @@
-﻿using IronLevelDB.Cache.LRU;
+using IronLevelDB.Cache.LRU;
 
 namespace IronLevelDB
 {

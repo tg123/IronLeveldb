@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -55,6 +55,7 @@ namespace IronLevelDB
                 {
                     throw new AggregateException(es);
                 }
+
                 if (es.Count == 1)
                 {
                     throw es.First();
@@ -75,7 +76,8 @@ namespace IronLevelDB
 
         public static IIronLeveldb BuildFromSingleTable(IIronLeveldbOptions options, Stream stream)
         {
-            var table = new Table(new StreamContentReader(stream), options.BlockCache, new InternalKeyComparer(options.Comparer));
+            var table = new Table(new StreamContentReader(stream), options.BlockCache,
+                new InternalKeyComparer(options.Comparer));
             return new IronLeveldbStub(options, table, stream.Dispose);
         }
 

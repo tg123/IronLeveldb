@@ -24,6 +24,5 @@ namespace IronLevelDB.DB
         IReadOnlyList<byte> IKeyValuePair<IReadOnlyList<byte>, IReadOnlyList<byte>>.Value => _real.Value;
 
         IReadOnlyList<byte> IKeyValuePair<IReadOnlyList<byte>, IReadOnlyList<byte>>.Key => InternalKey.UserKey;
-
     }
 }

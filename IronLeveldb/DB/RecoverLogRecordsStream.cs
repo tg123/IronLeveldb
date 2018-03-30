@@ -55,6 +55,7 @@ namespace IronLevelDB.DB
                             throw new IOException("not fully read");
                         }
                     }
+
                     nextpos = _stream.Position;
                 }
 
@@ -88,6 +89,7 @@ namespace IronLevelDB.DB
                         {
                             throw new InvalidDataException("missing start of fragmented record(1)");
                         }
+
                         recordStream.Write(data, 0, data.Length);
 
                         break;
@@ -96,6 +98,7 @@ namespace IronLevelDB.DB
                         {
                             throw new InvalidDataException("missing start of fragmented record(2)");
                         }
+
                         recordStream.Write(data, 0, data.Length);
 
                         yield return recordStream;

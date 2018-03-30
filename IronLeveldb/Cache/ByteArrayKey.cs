@@ -30,14 +30,17 @@ namespace IronLevelDB.Cache
             {
                 return false;
             }
+
             if (ReferenceEquals(this, obj))
             {
                 return true;
             }
+
             if (obj.GetType() != GetType())
             {
                 return false;
             }
+
             return Equals((ByteArrayKey) obj);
         }
 

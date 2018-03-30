@@ -1,6 +1,5 @@
-﻿using System.IO;
+using System.IO;
 using System.Linq;
-using IronLevelDB.DB;
 using LevelDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -17,7 +16,7 @@ namespace IronLevelDB.Test
 
             try
             {
-                using (var db = LevelDB.DB.Open(dbpath, new LevelDB.Options
+                using (var db = LevelDB.DB.Open(dbpath, new Options
                 {
                     CreateIfMissing = true,
                     WriteBufferSize = ulong.MaxValue
@@ -30,7 +29,7 @@ namespace IronLevelDB.Test
                 }
 
                 // force leveldb to flush and recover log
-                using (LevelDB.DB.Open(dbpath, new LevelDB.Options()))
+                using (LevelDB.DB.Open(dbpath, new Options()))
                 {
                 }
 
@@ -69,7 +68,7 @@ namespace IronLevelDB.Test
 
             try
             {
-                using (var db = LevelDB.DB.Open(dbpath, new LevelDB.Options
+                using (var db = LevelDB.DB.Open(dbpath, new Options
                 {
                     CreateIfMissing = true,
                     WriteBufferSize = ulong.MaxValue
@@ -81,7 +80,7 @@ namespace IronLevelDB.Test
                     }
                 }
 
-                using (var db = LevelDB.DB.Open(dbpath, new LevelDB.Options()))
+                using (var db = LevelDB.DB.Open(dbpath, new Options()))
                 {
                     for (var i = 0; i < 10; i++)
                     {
@@ -90,7 +89,7 @@ namespace IronLevelDB.Test
                 }
 
                 // force leveldb to flush and recover log
-                using (LevelDB.DB.Open(dbpath, new LevelDB.Options()))
+                using (LevelDB.DB.Open(dbpath, new Options()))
                 {
                 }
 
@@ -128,7 +127,7 @@ namespace IronLevelDB.Test
 
             try
             {
-                using (var db = LevelDB.DB.Open(dbpath, new LevelDB.Options
+                using (var db = LevelDB.DB.Open(dbpath, new Options
                 {
                     CreateIfMissing = true,
                     WriteBufferSize = ulong.MaxValue
@@ -140,7 +139,7 @@ namespace IronLevelDB.Test
                     }
                 }
 
-                using (var db = LevelDB.DB.Open(dbpath, new LevelDB.Options()))
+                using (var db = LevelDB.DB.Open(dbpath, new Options()))
                 {
                     for (var i = 5; i < 10; i++)
                     {
@@ -149,7 +148,7 @@ namespace IronLevelDB.Test
                 }
 
                 // force leveldb to flush
-                using (LevelDB.DB.Open(dbpath, new LevelDB.Options()))
+                using (LevelDB.DB.Open(dbpath, new Options()))
                 {
                 }
 
@@ -190,7 +189,7 @@ namespace IronLevelDB.Test
 
 
                 // delete again
-                using (var db = LevelDB.DB.Open(dbpath, new LevelDB.Options()))
+                using (var db = LevelDB.DB.Open(dbpath, new Options()))
                 {
                     for (var i = 0; i < 5; i++)
                     {
@@ -198,7 +197,7 @@ namespace IronLevelDB.Test
                     }
                 }
 
-                using (var db = LevelDB.DB.Open(dbpath, new LevelDB.Options()))
+                using (var db = LevelDB.DB.Open(dbpath, new Options()))
                 {
                     for (var i = 5; i < 10; i++)
                     {
@@ -207,7 +206,7 @@ namespace IronLevelDB.Test
                 }
 
                 // force leveldb to flush
-                using (LevelDB.DB.Open(dbpath, new LevelDB.Options()))
+                using (LevelDB.DB.Open(dbpath, new Options()))
                 {
                 }
 

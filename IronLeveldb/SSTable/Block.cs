@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -42,6 +42,7 @@ namespace IronLevelDB.SSTable
             {
                 throw new InvalidDataException("bad block contents - numRestarts");
             }
+
             _restartOffset = _data.Length - (1 + _numRestarts) * sizeof(uint);
         }
 
@@ -103,7 +104,8 @@ namespace IronLevelDB.SSTable
 
                 ParseEntry(currentOffset, ref key, ref value);
 
-                yield return new InternalIByteArrayKeyValuePair(new ByteArrayKeyValuePair(key.ToArray(), value.ToArray()));
+                yield return new InternalIByteArrayKeyValuePair(new ByteArrayKeyValuePair(key.ToArray(),
+                    value.ToArray()));
 //                yield return new ArraySegByteArrayKeyValuePair(
 //                    key.Clone(),
 //                    new ArraySegment<byte>(value.Array, value.Offset, value.Count));

@@ -8,7 +8,8 @@ namespace IronLevelDB.Cache.LRU
     {
         private readonly long _capacity;
 
-        private readonly ConcurrentDictionary<ByteArrayKey, Node> _data = new ConcurrentDictionary<ByteArrayKey, Node>();
+        private readonly ConcurrentDictionary<ByteArrayKey, Node>
+            _data = new ConcurrentDictionary<ByteArrayKey, Node>();
 
         private readonly Node _head;
 
