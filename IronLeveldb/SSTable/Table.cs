@@ -3,21 +3,22 @@ using System.IO;
 using System.Linq;
 using Google.Protobuf;
 using IronLevelDB.Cache.LRU;
+using IronLevelDB.DB;
 
 namespace IronLevelDB.SSTable
 {
-    internal class Table : ISeekable<byte[], IByteArrayKeyValuePair>, IChargeValue
+    internal class Table : ISeekable<InternalKey, InternalIByteArrayKeyValuePair>, IChargeValue
     {
         private readonly ICache _cache;
         private readonly long _cacheId;
-        private readonly IKeyComparer _comparer;
+        private readonly InternalKeyComparer _comparer;
         private readonly IContentReader _contentReader;
 
         private readonly Block _indexBlock;
 //        private readonly Stream _stream;
 //        private readonly object _streamlock = new object();
 
-        public Table(IContentReader contentReader, ICache cache, IKeyComparer comparer)
+        public Table(IContentReader contentReader, ICache cache, InternalKeyComparer comparer)
         {
 //            _stream = stream;
             _contentReader = contentReader;
@@ -53,12 +54,12 @@ namespace IronLevelDB.SSTable
 
         public long Charge => _indexBlock.Charge;
 
-        public IEnumerable<IByteArrayKeyValuePair> Seek(byte[] key)
+        public IEnumerable<InternalIByteArrayKeyValuePair> Seek(InternalKey key)
         {
             return ToBlocks(_indexBlock.Seek(key)).SelectMany((b, i) => i == 0 ? b.Seek(key) : b.SeekFirst());
         }
 
-        public IEnumerable<IByteArrayKeyValuePair> SeekFirst()
+        public IEnumerable<InternalIByteArrayKeyValuePair> SeekFirst()
         {
             return ToBlocks(_indexBlock.SeekFirst()).SelectMany(b => b.SeekFirst());
         }

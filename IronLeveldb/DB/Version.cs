@@ -6,7 +6,7 @@ using IronLevelDB.SSTable;
 
 namespace IronLevelDB.DB
 {
-    internal class Version : ISeekable<byte[], InternalIByteArrayKeyValuePair>, IDisposable
+    internal class Version : ISeekable<InternalKey, InternalIByteArrayKeyValuePair>, IDisposable
     {
         private readonly ICache _cache;
 
@@ -46,23 +46,21 @@ namespace IronLevelDB.DB
             }
         }
 
-        public IEnumerable<InternalIByteArrayKeyValuePair> Seek(byte[] key)
+        public IEnumerable<InternalIByteArrayKeyValuePair> Seek(InternalKey key)
         {
-            // TODO snapshot is not support, use ulong.MaxValue (smallest) instead
-            var interkey = new InternalKey(key, ulong.MaxValue, InternalKey.ValueType.Value);
-
             // TODO only seek level0 and overlaps
             var entries = _level0.Concat(_level1AndLarger)
-                .Where(f => _internalKeyComparer.Compare(interkey, f.Largest) <= 0)
+                .Where(f => _internalKeyComparer.Compare(key, f.Largest) <= 0)
                 .Select(f =>
                 {
                     // key < smallest
-                    if (_internalKeyComparer.Compare(interkey, f.Smallest) <= 0)
+                    if (_internalKeyComparer.Compare(key, f.Smallest) <= 0)
                     {
-                        return ToTable(f).SeekFirst().ToInternalKeyValuePairs();
+                        return ToTable(f).SeekFirst();
                     }
 
-                    return ToTable(f).Seek(key).ToInternalKeyValuePairs();
+//                    return ToTable(f).Seek(interkey.ToByteArray()).ToInternalKeyValuePairs();
+                    return ToTable(f).Seek(key);
                 });
 
             return Merge(entries);
@@ -71,7 +69,7 @@ namespace IronLevelDB.DB
         public IEnumerable<InternalIByteArrayKeyValuePair> SeekFirst()
         {
             var entries = _level0.Concat(_level1AndLarger)
-                .Select(ToTable).Select(t => t.SeekFirst().ToInternalKeyValuePairs());
+                .Select(ToTable).Select(t => t.SeekFirst());
 
             return Merge(entries);
         }
@@ -113,7 +111,7 @@ namespace IronLevelDB.DB
             {
                 var contentReader = _options.Storge.GetTableContentById(file.Number);
 
-                table = new Table(contentReader, _options.BlockCache, _options.Comparer);
+                table = new Table(contentReader, _options.BlockCache, _internalKeyComparer);
                 _cache.Insert(_cacheId, cacheKey, table);
             }
 

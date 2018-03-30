@@ -5,15 +5,16 @@ using System.IO;
 using System.Linq;
 using Google.Protobuf;
 using IronLevelDB.Cache.LRU;
+using IronLevelDB.DB;
 
 namespace IronLevelDB.SSTable
 {
-    internal class Block : ISeekable<byte[], IByteArrayKeyValuePair>, IChargeValue
+    internal class Block : ISeekable<InternalKey, InternalIByteArrayKeyValuePair>, IChargeValue
     {
         // TODO option?
         private const int DefaultRestartInterval = 16;
 
-        private readonly IKeyComparer _comparer;
+        private readonly InternalKeyComparer _comparer;
 
         private readonly byte[] _data;
 
@@ -25,7 +26,7 @@ namespace IronLevelDB.SSTable
 //        {
 //        }
 
-        internal Block(byte[] data, IKeyComparer comparer)
+        internal Block(byte[] data, InternalKeyComparer comparer)
         {
             _data = data;
             _comparer = comparer;
@@ -46,7 +47,7 @@ namespace IronLevelDB.SSTable
 
         public long Charge => _data.Length;
 
-        public IEnumerable<IByteArrayKeyValuePair> Seek(byte[] target)
+        public IEnumerable<InternalIByteArrayKeyValuePair> Seek(InternalKey target)
         {
             var left = 0;
             var right = _numRestarts - 1;
@@ -61,7 +62,7 @@ namespace IronLevelDB.SSTable
                 keybuf.TrimToLength(0);
                 ParseEntry(GetRestartPointOffset(mid), ref keybuf, ref value);
 
-                var midKey = keybuf.ToArray();
+                var midKey = new InternalKey(new ArraySegment<byte>(keybuf.ToArray()));
 
                 if (_comparer.Compare(midKey, target) < 0)
                 {
@@ -78,15 +79,15 @@ namespace IronLevelDB.SSTable
             }
 
             // Linear search (within restart block) for first key >= target
-            return SeekToRestartPoint(left).SkipWhile(kv => _comparer.Compare(kv.Key, target) < 0);
+            return SeekToRestartPoint(left).SkipWhile(kv => _comparer.Compare(kv.InternalKey, target) < 0);
         }
 
-        public IEnumerable<IByteArrayKeyValuePair> SeekFirst()
+        public IEnumerable<InternalIByteArrayKeyValuePair> SeekFirst()
         {
             return SeekToRestartPoint(0);
         }
 
-        private IEnumerable<IByteArrayKeyValuePair> SeekToOffset(int offset, AppendableByteArraySegment lastkey)
+        private IEnumerable<InternalIByteArrayKeyValuePair> SeekToOffset(int offset, AppendableByteArraySegment lastkey)
         {
             var key = lastkey;
             var value = new ArraySegment<byte>(_data, offset, 0);
@@ -102,14 +103,14 @@ namespace IronLevelDB.SSTable
 
                 ParseEntry(currentOffset, ref key, ref value);
 
-                yield return new ByteArrayKeyValuePair(key.ToArray(), value.ToArray());
+                yield return new InternalIByteArrayKeyValuePair(new ByteArrayKeyValuePair(key.ToArray(), value.ToArray()));
 //                yield return new ArraySegByteArrayKeyValuePair(
 //                    key.Clone(),
 //                    new ArraySegment<byte>(value.Array, value.Offset, value.Count));
             }
         }
 
-        private IEnumerable<IByteArrayKeyValuePair> SeekToRestartPoint(int restartPointIndex)
+        private IEnumerable<InternalIByteArrayKeyValuePair> SeekToRestartPoint(int restartPointIndex)
         {
             return SeekToOffset(GetRestartPointOffset(restartPointIndex),
                 new AppendableByteArraySegment(DefaultRestartInterval));

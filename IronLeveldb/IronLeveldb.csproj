@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.4.1" />
-    <PackageReference Include="Snappy.Sharp" Version="1.0.0-b20170602007" />
+    <PackageReference Include="Snappy.Sharp" Version="1.0.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.5.0" />
   </ItemGroup>
 

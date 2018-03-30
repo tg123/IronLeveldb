@@ -36,37 +36,5 @@ namespace IronLevelDB.DB
                 }
             }
         }
-
-        public static IEnumerable<InternalIByteArrayKeyValuePair> ToInternalKeyValuePairs(
-            this IEnumerable<IByteArrayKeyValuePair> rawKeyValuePairs)
-        {
-            return rawKeyValuePairs.Select(kv => new InternalIByteArrayKeyValuePair(kv));
-        }
-
-        public static ISeekable<byte[], InternalIByteArrayKeyValuePair> ToInternalKeyValuePairs(
-            this ISeekable<byte[], IByteArrayKeyValuePair> rawKeyValuePairs)
-        {
-            return new InternalSeekableWrapper(rawKeyValuePairs);
-        }
-
-        private class InternalSeekableWrapper : ISeekable<byte[], InternalIByteArrayKeyValuePair>
-        {
-            private readonly ISeekable<byte[], IByteArrayKeyValuePair> _raw;
-
-            public InternalSeekableWrapper(ISeekable<byte[], IByteArrayKeyValuePair> raw)
-            {
-                _raw = raw;
-            }
-
-            public IEnumerable<InternalIByteArrayKeyValuePair> Seek(byte[] key)
-            {
-                return _raw.Seek(key).ToInternalKeyValuePairs();
-            }
-
-            public IEnumerable<InternalIByteArrayKeyValuePair> SeekFirst()
-            {
-                return _raw.SeekFirst().ToInternalKeyValuePairs();
-            }
-        }
     }
 }

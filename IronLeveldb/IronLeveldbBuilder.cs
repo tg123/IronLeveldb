@@ -75,8 +75,8 @@ namespace IronLevelDB
 
         public static IIronLeveldb BuildFromSingleTable(IIronLeveldbOptions options, Stream stream)
         {
-            var table = new Table(new StreamContentReader(stream), options.BlockCache, options.Comparer);
-            return new IronLeveldbStub(options, table.ToInternalKeyValuePairs(), stream.Dispose);
+            var table = new Table(new StreamContentReader(stream), options.BlockCache, new InternalKeyComparer(options.Comparer));
+            return new IronLeveldbStub(options, table, stream.Dispose);
         }
 
         public static IIronLeveldb BuildFromSingleTable(Stream stream)
