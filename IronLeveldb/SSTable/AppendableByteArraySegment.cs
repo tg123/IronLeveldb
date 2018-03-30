@@ -1,9 +1,10 @@
 using System;
-using System.Text;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace IronLevelDB.SSTable
 {
-    internal class AppendableByteArraySegment
+    internal class AppendableByteArraySegment : IReadOnlyCollection<byte>
     {
         private readonly ArraySegment<byte>[] _arraySegments;
         private int _p;
@@ -14,6 +15,25 @@ namespace IronLevelDB.SSTable
         }
 
         public int Length { get; private set; }
+
+        public IEnumerator<byte> GetEnumerator()
+        {
+            for (var i = 0; i < _p; i++)
+            {
+                var arraySegment = _arraySegments[i];
+                foreach (var b in arraySegment)
+                {
+                    yield return b;
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public int Count => Length;
 
         public void Append(ArraySegment<byte> array)
         {
@@ -82,34 +102,6 @@ namespace IronLevelDB.SSTable
             }
 
             return s;
-        }
-    }
-
-    internal static class AppendableByteArraySegmentExt
-    {
-        public static void Append(this AppendableByteArraySegment abs, byte[] array)
-        {
-            abs.Append(new ArraySegment<byte>(array));
-        }
-
-        public static void Append(this AppendableByteArraySegment abs, string str)
-        {
-            abs.Append(str, Encoding.UTF8);
-        }
-
-        public static void Append(this AppendableByteArraySegment abs, string str, Encoding encoding)
-        {
-            abs.Append(encoding.GetBytes(str));
-        }
-
-        public static string GetString(this AppendableByteArraySegment abs, Encoding encoding)
-        {
-            return encoding.GetString(abs.ToArray());
-        }
-
-        public static string GetString(this AppendableByteArraySegment abs)
-        {
-            return abs.GetString(Encoding.UTF8);
         }
     }
 }

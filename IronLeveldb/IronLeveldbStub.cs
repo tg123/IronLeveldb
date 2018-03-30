@@ -7,16 +7,16 @@ namespace IronLevelDB
 {
     internal class IronLeveldbStub : IIronLeveldb
     {
+        private readonly IKeyComparer _comparer;
         private readonly ISeekable<InternalKey, InternalIByteArrayKeyValuePair> _dataProvider;
         private readonly Action _onDispose;
-        private readonly IIronLeveldbOptions _options;
 
         public IronLeveldbStub(IIronLeveldbOptions options,
             ISeekable<InternalKey, InternalIByteArrayKeyValuePair> dataProvider, Action onDispose = null)
         {
-            _options = options;
             _dataProvider = dataProvider;
             _onDispose = onDispose;
+            _comparer = options?.Comparer ?? LeveldbDefaultKeyComparer.Comparer;
         }
 
         public void Dispose()
@@ -28,12 +28,43 @@ namespace IronLevelDB
         {
             // TODO snapshot is not support, use ulong.MaxValue (smallest) instead
             var interkey = new InternalKey(key.ToArray(), InternalKey.MaxSequenceNumber, InternalKey.ValueTypeForSeek);
-            return _dataProvider.Seek(interkey).FilterDeleted(_options.Comparer);
+            return FilterDeleted(_dataProvider.Seek(interkey));
         }
 
         public IEnumerable<IReadonlyBytesKeyValuePair> SeekFirst()
         {
-            return _dataProvider.SeekFirst().FilterDeleted(_options.Comparer);
+            return FilterDeleted(_dataProvider.SeekFirst());
+        }
+
+        private IEnumerable<InternalIByteArrayKeyValuePair> FilterDeleted(
+            IEnumerable<InternalIByteArrayKeyValuePair> internalkvs)
+        {
+            IReadOnlyList<byte> lastkey = null;
+
+            foreach (var kv in internalkvs)
+            {
+                switch (kv.InternalKey.Type)
+                {
+                    case InternalKey.ValueType.Deletion:
+                        lastkey = kv.Key;
+
+                        break;
+                    case InternalKey.ValueType.Value:
+                        if (lastkey != null && _comparer.Compare(kv.Key, lastkey) <= 0)
+                        {
+                            // skip
+                        }
+                        else
+                        {
+                            yield return kv;
+                            lastkey = kv.Key;
+                        }
+
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
         }
     }
 }

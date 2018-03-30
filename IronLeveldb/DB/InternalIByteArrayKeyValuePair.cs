@@ -1,28 +1,24 @@
 using System;
 using System.Collections.Generic;
+using IronLevelDB.SSTable;
 
 namespace IronLevelDB.DB
 {
-    internal class InternalIByteArrayKeyValuePair : IByteArrayKeyValuePair, IReadonlyBytesKeyValuePair
+    internal class InternalIByteArrayKeyValuePair : IReadonlyBytesKeyValuePair
     {
-        private readonly IByteArrayKeyValuePair _real;
+        private readonly ArraySegment<byte> _value;
 
-        public InternalIByteArrayKeyValuePair(IByteArrayKeyValuePair real)
+        public InternalIByteArrayKeyValuePair(AppendableByteArraySegment key,
+            ArraySegment<byte> value)
         {
-            var key = (real as IArraySegByteArrayKeyValuePair)?.Key ?? new ArraySegment<byte>(real.Key);
-
             InternalKey = new InternalKey(key);
-            _real = real;
+            _value = value;
         }
 
         public InternalKey InternalKey { get; }
 
-        public byte[] Key => InternalKey.UserKey;
+        public IReadOnlyList<byte> Value => _value;
 
-        public byte[] Value => _real.Value;
-
-        IReadOnlyList<byte> IKeyValuePair<IReadOnlyList<byte>, IReadOnlyList<byte>>.Value => _real.Value;
-
-        IReadOnlyList<byte> IKeyValuePair<IReadOnlyList<byte>, IReadOnlyList<byte>>.Key => InternalKey.UserKey;
+        public IReadOnlyList<byte> Key => InternalKey.UserKey;
     }
 }

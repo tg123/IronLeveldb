@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IronLevelDB.Cache;
 using IronLevelDB.SSTable;
 
 namespace IronLevelDB.DB
@@ -31,7 +32,7 @@ namespace IronLevelDB.DB
             _internalComparer = Comparer<InternalIByteArrayKeyValuePair>.Create(
                 (a, b) => _internalKeyComparer.Compare(a.InternalKey, b.InternalKey));
 
-            _cacheId = options.TableCache.NewId();
+            _cacheId = IdGenerator.NewId();
 
             _cache = options.TableCache;
         }

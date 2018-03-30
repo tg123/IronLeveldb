@@ -104,11 +104,7 @@ namespace IronLevelDB.SSTable
 
                 ParseEntry(currentOffset, ref key, ref value);
 
-                yield return new InternalIByteArrayKeyValuePair(new ByteArrayKeyValuePair(key.ToArray(),
-                    value.ToArray()));
-//                yield return new ArraySegByteArrayKeyValuePair(
-//                    key.Clone(),
-//                    new ArraySegment<byte>(value.Array, value.Offset, value.Count));
+                yield return new InternalIByteArrayKeyValuePair(key.Clone(), value);
             }
         }
 

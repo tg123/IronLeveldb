@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using IronLevelDB.Cache.LRU;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -8,12 +8,12 @@ namespace IronLevelDB.Test.Cache.LRU
     {
         internal static void Insert(this ICache cache, int key, int? value)
         {
-            cache.Insert(BitConverter.GetBytes(key), value);
+            cache.Insert(0, BitConverter.GetBytes(key), value);
         }
 
         internal static int? Lookup(this ICache cache, int key)
         {
-            return cache.Lookup<int?>(BitConverter.GetBytes(key));
+            return cache.Lookup<int?>(0, BitConverter.GetBytes(key));
         }
     }
 

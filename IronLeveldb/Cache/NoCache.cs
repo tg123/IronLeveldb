@@ -1,4 +1,6 @@
-﻿namespace IronLevelDB.Cache
+using System.Collections.Generic;
+
+namespace IronLevelDB.Cache
 {
     public class NoCache : ICache
     {
@@ -6,25 +8,16 @@
         {
         }
 
-        public long NewId()
-        {
-            return IdGenerator.NewId();
-        }
-
-        public void Insert<T>(byte[] key, T value)
+        public void Insert<T>(long namespaceId, IReadOnlyList<byte> key, T value)
         {
         }
 
-        public T Lookup<T>(byte[] key)
+        public T Lookup<T>(long namespaceId, IReadOnlyList<byte> key)
         {
             return default(T);
         }
 
-        public void Erase(byte[] key)
-        {
-        }
-
-        public void Insert<T>(string key, T value)
+        public void Erase(long namespaceId, IReadOnlyList<byte> key)
         {
         }
     }

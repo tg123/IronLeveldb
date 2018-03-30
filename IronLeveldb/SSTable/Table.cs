@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Google.Protobuf;
+using IronLevelDB.Cache;
 using IronLevelDB.Cache.LRU;
 using IronLevelDB.DB;
 
@@ -15,17 +16,14 @@ namespace IronLevelDB.SSTable
         private readonly IContentReader _contentReader;
 
         private readonly Block _indexBlock;
-//        private readonly Stream _stream;
-//        private readonly object _streamlock = new object();
 
         public Table(IContentReader contentReader, ICache cache, InternalKeyComparer comparer)
         {
-//            _stream = stream;
             _contentReader = contentReader;
             _comparer = comparer;
 
             _cache = cache;
-            _cacheId = _cache.NewId();
+            _cacheId = IdGenerator.NewId();
 
             var size = contentReader.ContentLength;
 
@@ -42,14 +40,6 @@ namespace IronLevelDB.SSTable
             var footer = new Footer(footers);
 
             _indexBlock = new Block(_contentReader.ReadBlock(footer.IndexHandle), comparer);
-
-            //            _indexBlock = new Lazy<Block>(() =>
-            //            {
-            //                stream.Seek(-Footer.EncodedLength, SeekOrigin.End);
-            //                var footer = new Footer(stream);
-            //
-            //                return new Block(stream, footer.IndexHandle, comparer);
-            //            }, LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
         public long Charge => _indexBlock.Charge;
@@ -64,7 +54,7 @@ namespace IronLevelDB.SSTable
             return ToBlocks(_indexBlock.SeekFirst()).SelectMany(b => b.SeekFirst());
         }
 
-        private IEnumerable<Block> ToBlocks(IEnumerable<IByteArrayKeyValuePair> indexes)
+        private IEnumerable<Block> ToBlocks(IEnumerable<InternalIByteArrayKeyValuePair> indexes)
         {
             foreach (var indexHandle in indexes)
             {
@@ -75,13 +65,10 @@ namespace IronLevelDB.SSTable
                 if (block == null)
                 {
                     // TODO here sometimes might cause read stream twice
-                    var pb = new CodedInputStream(indexHandle.Value);
+                    var pb = new CodedInputStream(indexHandle.Value.ToArray());
                     var blockHandle = new BlockHandle(pb);
 
-//                    lock (_streamlock)
-//                    {
                     block = new Block(_contentReader.ReadBlock(blockHandle), _comparer);
-//                    }
                     _cache.Insert(_cacheId, cachekey, block);
                 }
 

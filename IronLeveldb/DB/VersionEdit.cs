@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Google.Protobuf;
@@ -103,7 +103,7 @@ namespace IronLevelDB.DB
 
         private static InternalKey ReadInternalKey(CodedInputStream pb)
         {
-            return new InternalKey(new ArraySegment<byte>(pb.ReadBytes().ToByteArray()));
+            return new InternalKey(pb.ReadBytes());
         }
 
         private enum Tag

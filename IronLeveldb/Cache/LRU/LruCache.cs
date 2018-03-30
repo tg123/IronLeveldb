@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace IronLevelDB.Cache.LRU
@@ -30,7 +31,7 @@ namespace IronLevelDB.Cache.LRU
         }
 
 
-        public void Insert<T>(byte[] key, T value)
+        public void Insert<T>(long namespaceId, IReadOnlyList<byte> key, T value)
         {
             var charge = (value as IChargeValue)?.Charge ?? 1;
 
@@ -41,7 +42,7 @@ namespace IronLevelDB.Cache.LRU
 
             var node = new Node<T>
             {
-                ByteArrayKey = new ByteArrayKey(key),
+                ByteArrayKey = new ByteArrayKey(namespaceId, key),
                 Charge = charge,
                 Value = value
             };
@@ -80,21 +81,18 @@ namespace IronLevelDB.Cache.LRU
             }
         }
 
-        public T Lookup<T>(byte[] key)
+        public T Lookup<T>(long namespaceId, IReadOnlyList<byte> key)
         {
             _rwlock.EnterUpgradeableReadLock();
 
             try
             {
-                Node t;
-                if (!_data.TryGetValue(new ByteArrayKey(key), out t))
+                if (!_data.TryGetValue(new ByteArrayKey(namespaceId, key), out var t))
                 {
                     return default(T);
                 }
 
-                var node = t as Node<T>;
-
-                if (node == null)
+                if (!(t is Node<T> node))
                 {
                     return default(T);
                 }
@@ -109,10 +107,9 @@ namespace IronLevelDB.Cache.LRU
             }
         }
 
-        public void Erase(byte[] key)
+        public void Erase(long namespaceId, IReadOnlyList<byte> key)
         {
-            Node removed;
-            if (_data.TryRemove(new ByteArrayKey(key), out removed))
+            if (_data.TryRemove(new ByteArrayKey(namespaceId, key), out var removed))
             {
                 _rwlock.EnterWriteLock();
                 try
@@ -143,11 +140,6 @@ namespace IronLevelDB.Cache.LRU
             {
                 _rwlock.ExitWriteLock();
             }
-        }
-
-        public long NewId()
-        {
-            return IdGenerator.NewId();
         }
 
         private void MoveToHead(Node node)

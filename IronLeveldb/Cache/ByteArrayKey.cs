@@ -1,15 +1,16 @@
-﻿using System.Linq;
+using System.Collections.Generic;
 
 namespace IronLevelDB.Cache
 {
     internal class ByteArrayKey
     {
         private readonly int _hashCode;
-        private readonly byte[] _key;
+        private readonly IReadOnlyList<byte> _key;
+        private readonly long _namespaceId;
 
-        public ByteArrayKey(byte[] key)
+        public ByteArrayKey(long namespaceId, IReadOnlyList<byte> key)
         {
-            // shoud copy yet private
+            _namespaceId = namespaceId;
             _key = key;
             _hashCode = HashCode(key);
         }
@@ -21,7 +22,25 @@ namespace IronLevelDB.Cache
                 return false;
             }
 
-            return _key.SequenceEqual(other._key);
+            if (_namespaceId != other._namespaceId)
+            {
+                return false;
+            }
+
+            if (_key.Count != other._key.Count)
+            {
+                return false;
+            }
+
+            for (var i = _key.Count - 1; i >= 0; i--)
+            {
+                if (_key[i] != other._key[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public override bool Equals(object obj)
@@ -46,11 +65,12 @@ namespace IronLevelDB.Cache
 
         public override int GetHashCode()
         {
-            return _hashCode;
+            var h = _namespaceId * 31 + _hashCode;
+            return (int) (h ^ (h >> 32));
         }
 
         // copy from jdk Arrays
-        private static int HashCode(byte[] a)
+        private static int HashCode(IReadOnlyList<byte> a)
         {
             if (a == null)
             {

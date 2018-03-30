@@ -1,9 +1,38 @@
-﻿using System;
+using System;
+using System.Text;
 using IronLevelDB.SSTable;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IronLevelDB.Test.SSTable
 {
+    internal static class AppendableByteArraySegmentExt
+    {
+        public static void Append(this AppendableByteArraySegment abs, byte[] array)
+        {
+            abs.Append(new ArraySegment<byte>(array));
+        }
+
+        public static void Append(this AppendableByteArraySegment abs, string str)
+        {
+            abs.Append(str, Encoding.UTF8);
+        }
+
+        public static void Append(this AppendableByteArraySegment abs, string str, Encoding encoding)
+        {
+            abs.Append(encoding.GetBytes(str));
+        }
+
+        public static string GetString(this AppendableByteArraySegment abs, Encoding encoding)
+        {
+            return encoding.GetString(abs.ToArray());
+        }
+
+        public static string GetString(this AppendableByteArraySegment abs)
+        {
+            return abs.GetString(Encoding.UTF8);
+        }
+    }
+
     [TestClass]
     public class AppendableByteArraySegmentTests
     {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace IronLevelDB.Cache
 {
@@ -7,15 +8,14 @@ namespace IronLevelDB.Cache
         private readonly ConcurrentDictionary<ByteArrayKey, object> _data =
             new ConcurrentDictionary<ByteArrayKey, object>();
 
-        public void Insert<T>(byte[] key, T value)
+        public void Insert<T>(long namespaceId, IReadOnlyList<byte> key, T value)
         {
-            _data.AddOrUpdate(new ByteArrayKey(key), value, (_, old) => value);
+            _data.AddOrUpdate(new ByteArrayKey(namespaceId, key), value, (_, old) => value);
         }
 
-        public T Lookup<T>(byte[] key)
+        public T Lookup<T>(long namespaceId, IReadOnlyList<byte> key)
         {
-            object v;
-            if (!_data.TryGetValue(new ByteArrayKey(key), out v))
+            if (!_data.TryGetValue(new ByteArrayKey(namespaceId, key), out var v))
             {
                 return default(T);
             }
@@ -23,20 +23,14 @@ namespace IronLevelDB.Cache
             return v is T ? (T) v : default(T);
         }
 
-        public void Erase(byte[] key)
+        public void Erase(long namespaceId, IReadOnlyList<byte> key)
         {
-            object _;
-            _data.TryRemove(new ByteArrayKey(key), out _);
+            _data.TryRemove(new ByteArrayKey(namespaceId, key), out object _);
         }
 
         public void Prune()
         {
             _data.Clear();
-        }
-
-        public long NewId()
-        {
-            return IdGenerator.NewId();
         }
     }
 }

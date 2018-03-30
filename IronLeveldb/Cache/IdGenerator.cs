@@ -1,8 +1,8 @@
-﻿using System.Threading;
+using System.Threading;
 
 namespace IronLevelDB.Cache
 {
-    internal static class IdGenerator
+    public static class IdGenerator
     {
         private static long _id;
 
