@@ -1,4 +1,4 @@
-﻿namespace IronLevelDB.Cache.LRU
+namespace IronLevelDB.Cache.LRU
 {
     public interface IChargeValue
     {

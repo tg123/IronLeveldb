@@ -1,4 +1,4 @@
-﻿namespace IronLevelDB.DB
+namespace IronLevelDB.DB
 {
     internal struct FileMetaData
     {

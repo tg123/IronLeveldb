@@ -63,7 +63,7 @@ namespace IronLevelDB.SSTable
                 keybuf.TrimToLength(0);
                 ParseEntry(GetRestartPointOffset(mid), ref keybuf, ref value);
 
-                var midKey = new InternalKey(new ArraySegment<byte>(keybuf.ToArray()));
+                var midKey = InternalKey.FromUnsafe(keybuf.ToByteArray());
 
                 if (_comparer.Compare(midKey, target) < 0)
                 {

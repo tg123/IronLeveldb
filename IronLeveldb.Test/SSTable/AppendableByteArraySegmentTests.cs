@@ -24,7 +24,7 @@ namespace IronLevelDB.Test.SSTable
 
         public static string GetString(this AppendableByteArraySegment abs, Encoding encoding)
         {
-            return encoding.GetString(abs.ToArray());
+            return encoding.GetString(abs.ToByteArray());
         }
 
         public static string GetString(this AppendableByteArraySegment abs)

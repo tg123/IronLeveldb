@@ -1,4 +1,4 @@
-﻿using IronLevelDB.DB;
+using IronLevelDB.DB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IronLevelDB.Test.DB

@@ -60,7 +60,6 @@ namespace IronLevelDB.DB
                         return ToTable(f).SeekFirst();
                     }
 
-//                    return ToTable(f).Seek(interkey.ToByteArray()).ToInternalKeyValuePairs();
                     return ToTable(f).Seek(key);
                 });
 

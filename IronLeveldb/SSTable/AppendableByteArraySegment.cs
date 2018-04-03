@@ -71,7 +71,7 @@ namespace IronLevelDB.SSTable
             }
         }
 
-        public byte[] ToArray()
+        public byte[] ToByteArray()
         {
             var merged = new byte[Length];
 

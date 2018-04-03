@@ -1,4 +1,4 @@
-﻿namespace IronLevelDB
+namespace IronLevelDB
 {
     public interface IIronLeveldbOptions
     {
