@@ -1,6 +1,6 @@
-using IronLevelDB.Cache.LRU;
+using IronLeveldb.Cache.LRU;
 
-namespace IronLevelDB
+namespace IronLeveldb
 {
     public class IronLeveldbOptions : IIronLeveldbOptions
     {

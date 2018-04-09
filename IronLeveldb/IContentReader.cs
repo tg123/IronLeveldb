@@ -1,4 +1,4 @@
-namespace IronLevelDB
+namespace IronLeveldb
 {
     public interface IContentReader
     {

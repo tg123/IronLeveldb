@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Google.Protobuf;
-using IronLevelDB.Cache.LRU;
-using IronLevelDB.DB;
+using IronLeveldb.Cache.LRU;
+using IronLeveldb.DB;
 
-namespace IronLevelDB.SSTable
+namespace IronLeveldb.SSTable
 {
     internal class Block : ISeekable<InternalKey, InternalIByteArrayKeyValuePair>, IChargeValue
     {

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using IronLevelDB.SSTable;
+using IronLeveldb.SSTable;
 
-namespace IronLevelDB.DB
+namespace IronLeveldb.DB
 {
     internal class InternalIByteArrayKeyValuePair : IReadonlyBytesKeyValuePair
     {

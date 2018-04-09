@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronLevelDB
+namespace IronLeveldb
 {
     public class LeveldbDefaultKeyComparer : IKeyComparer
     {

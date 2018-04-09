@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace IronLevelDB
+namespace IronLeveldb
 {
     public interface ISeekable<in TK, out TV>
     {

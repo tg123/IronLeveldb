@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace IronLevelDB
+namespace IronLeveldb
 {
     public interface IKeyComparer : IComparer<IReadOnlyList<byte>>
     {

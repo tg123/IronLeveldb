@@ -1,8 +1,8 @@
 using System;
-using IronLevelDB.Cache.LRU;
+using IronLeveldb.Cache.LRU;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace IronLevelDB.Test.Cache.LRU
+namespace IronLeveldb.Test.Cache.LRU
 {
     internal static class CacheExt
     {

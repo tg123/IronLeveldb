@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Google.Protobuf;
 
-namespace IronLevelDB.DB
+namespace IronLeveldb.DB
 {
     internal class VersionEdit
     {

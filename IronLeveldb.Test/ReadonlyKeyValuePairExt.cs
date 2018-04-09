@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Text;
 
-namespace IronLevelDB.Test
+namespace IronLeveldb.Test
 {
     internal static class ReadonlyKeyValuePairExt
     {

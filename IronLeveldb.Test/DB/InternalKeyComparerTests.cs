@@ -1,7 +1,7 @@
-using IronLevelDB.DB;
+using IronLeveldb.DB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace IronLevelDB.Test.DB
+namespace IronLeveldb.Test.DB
 {
     [TestClass]
     public class InternalKeyComparerTests

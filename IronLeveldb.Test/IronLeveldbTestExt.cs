@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace IronLevelDB.Test
+namespace IronLeveldb.Test
 {
     public static class IronLeveldbTestExt
     {

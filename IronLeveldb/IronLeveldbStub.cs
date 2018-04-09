@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IronLevelDB.DB;
+using IronLeveldb.DB;
 
-namespace IronLevelDB
+namespace IronLeveldb
 {
     internal class IronLeveldbStub : IIronLeveldb
     {

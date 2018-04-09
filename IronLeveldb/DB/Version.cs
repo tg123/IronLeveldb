@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using IronLevelDB.Cache;
-using IronLevelDB.SSTable;
+using IronLeveldb.Cache;
+using IronLeveldb.SSTable;
 
-namespace IronLevelDB.DB
+namespace IronLeveldb.DB
 {
     internal class Version : ISeekable<InternalKey, InternalIByteArrayKeyValuePair>, IDisposable
     {

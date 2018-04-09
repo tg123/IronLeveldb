@@ -3,9 +3,8 @@ using System.IO;
 using System.Linq;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace IronLevelDB.Storages.Azure
+namespace IronLeveldb.Storage.AzureBlob
 {
-    // TODO change to dotstandard 
     public class AzureBlobFolderStorage : IIronLeveldbStorge
     {
         private readonly CloudBlobDirectory[] _folders;

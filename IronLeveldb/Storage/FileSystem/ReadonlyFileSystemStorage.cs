@@ -6,7 +6,7 @@ using System.Linq;
 
 //using System.IO.MemoryMappedFiles;
 
-namespace IronLevelDB.Storages.FileSystem
+namespace IronLeveldb.Storage.FileSystem
 {
     public class ReadonlyFileSystemStorage : IIronLeveldbStorge
     {

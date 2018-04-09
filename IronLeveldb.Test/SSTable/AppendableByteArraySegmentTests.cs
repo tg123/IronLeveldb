@@ -1,9 +1,9 @@
 using System;
 using System.Text;
-using IronLevelDB.SSTable;
+using IronLeveldb.SSTable;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace IronLevelDB.Test.SSTable
+namespace IronLeveldb.Test.SSTable
 {
     internal static class AppendableByteArraySegmentExt
     {

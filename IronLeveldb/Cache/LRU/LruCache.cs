@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace IronLevelDB.Cache.LRU
+namespace IronLeveldb.Cache.LRU
 {
     public class LruCache : ICache
     {

@@ -1,4 +1,4 @@
-namespace IronLevelDB.Storages
+namespace IronLeveldb.Storage
 {
     public static class FileNameMaker
     {

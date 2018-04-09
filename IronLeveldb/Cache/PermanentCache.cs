@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace IronLevelDB.Cache
+namespace IronLeveldb.Cache
 {
     public class PermanentCache : ICache
     {

@@ -1,6 +1,6 @@
 using System.Threading;
 
-namespace IronLevelDB.Cache
+namespace IronLeveldb.Cache
 {
     public static class IdGenerator
     {

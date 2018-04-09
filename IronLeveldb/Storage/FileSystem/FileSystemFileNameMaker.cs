@@ -1,4 +1,4 @@
-namespace IronLevelDB.Storages.FileSystem
+namespace IronLeveldb.Storage.FileSystem
 {
     internal class FileSystemFileNameMaker
     {

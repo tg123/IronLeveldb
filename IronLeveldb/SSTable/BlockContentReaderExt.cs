@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using Snappy.Sharp;
 
-namespace IronLevelDB.SSTable
+namespace IronLeveldb.SSTable
 {
     internal static class BlockContentReaderExt
     {

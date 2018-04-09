@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Google.Protobuf;
-using IronLevelDB.Cache;
-using IronLevelDB.Cache.LRU;
-using IronLevelDB.DB;
+using IronLeveldb.Cache;
+using IronLeveldb.Cache.LRU;
+using IronLeveldb.DB;
 
-namespace IronLevelDB.SSTable
+namespace IronLeveldb.SSTable
 {
     internal class Table : ISeekable<InternalKey, InternalIByteArrayKeyValuePair>, IChargeValue
     {

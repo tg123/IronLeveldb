@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace IronLevelDB.Storages
+namespace IronLeveldb.Storage
 {
     public class StreamContentReader : IContentReader
     {

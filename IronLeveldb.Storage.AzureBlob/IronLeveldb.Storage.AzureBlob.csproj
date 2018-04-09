@@ -1,9 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>1.1.0</VersionPrefix>
     <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Authors>Boshi Lian</Authors>
     <Company />
     <Product />
@@ -12,13 +10,14 @@
     <PackageProjectUrl>https://github.com/tg123/IronLeveldb</PackageProjectUrl>
     <RepositoryUrl>https://github.com/tg123/IronLeveldb</RepositoryUrl>
     <PackageTags>leveldb azure blob</PackageTags>
-    <RootNamespace>IronLeveldb</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.4.1" />
-    <PackageReference Include="Snappy.Sharp" Version="1.0.0" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IronLeveldb\IronLeveldb.csproj" />
+  </ItemGroup>
 
 </Project>

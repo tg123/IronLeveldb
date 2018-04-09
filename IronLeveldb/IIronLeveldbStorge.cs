@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace IronLevelDB
+namespace IronLeveldb
 {
     public interface IIronLeveldbStorge : IDisposable
     {

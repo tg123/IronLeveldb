@@ -1,7 +1,7 @@
 using System.IO;
 using Google.Protobuf;
 
-namespace IronLevelDB.SSTable
+namespace IronLeveldb.SSTable
 {
     internal class Footer
     {

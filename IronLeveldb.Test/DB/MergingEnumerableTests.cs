@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using IronLevelDB.DB;
+using System.Linq;
+using IronLeveldb.DB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace IronLevelDB.Test.DB
+namespace IronLeveldb.Test.DB
 {
     [TestClass]
     public class MergingEnumerableTests

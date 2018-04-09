@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace IronLevelDB.Test
+namespace IronLeveldb.Test
 {
     [TestClass]
     public class LeveldbDefaultKeyComparerTests

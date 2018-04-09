@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace IronLevelDB.Cache
+namespace IronLeveldb.Cache
 {
     internal class ByteArrayKey
     {

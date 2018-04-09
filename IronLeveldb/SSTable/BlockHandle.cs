@@ -1,6 +1,6 @@
 using Google.Protobuf;
 
-namespace IronLevelDB.SSTable
+namespace IronLeveldb.SSTable
 {
     internal class BlockHandle
     {

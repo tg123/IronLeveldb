@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace IronLevelDB.DB
+namespace IronLeveldb.DB
 {
     internal class InternalKeyComparer : IComparer<InternalKey>
     {

@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using IronLevelDB.DB;
-using IronLevelDB.SSTable;
-using IronLevelDB.Storages;
-using IronLevelDB.Storages.FileSystem;
-using Version = IronLevelDB.DB.Version;
+using IronLeveldb.DB;
+using IronLeveldb.SSTable;
+using IronLeveldb.Storage;
+using IronLeveldb.Storage.FileSystem;
 
-namespace IronLevelDB
+namespace IronLeveldb
 {
     public static class IronLeveldbBuilder
     {
@@ -18,7 +17,7 @@ namespace IronLevelDB
             var manifestStream = storge.GetCurrentDescriptorContent();
 
             // TODO base version
-            var b = new Version.Builder(options, null);
+            var b = new DB.Version.Builder(options, null);
             using (manifestStream)
             {
                 foreach (var stream in new RecoverLogRecordsStream(manifestStream))

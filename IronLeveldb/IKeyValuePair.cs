@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace IronLevelDB
+namespace IronLeveldb
 {
     public interface IKeyValuePair<out TK, out TV>
     {

@@ -3,7 +3,7 @@ using System.Linq;
 using LevelDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace IronLevelDB.Test
+namespace IronLeveldb.Test
 {
     [TestClass]
     public class ReadonlyFileSystemLeveldbTests

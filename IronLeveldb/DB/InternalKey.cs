@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace IronLevelDB.DB
+namespace IronLeveldb.DB
 {
     internal class InternalKey
     {

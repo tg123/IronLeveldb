@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IronLevelDB
+namespace IronLeveldb
 {
     public interface IIronLeveldb : ISeekable<IReadOnlyList<byte>, IReadonlyBytesKeyValuePair>, IDisposable
     {
