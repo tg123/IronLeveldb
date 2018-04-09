@@ -5,9 +5,7 @@ namespace IronLeveldb
 {
     public interface IIronLeveldbStorge : IDisposable
     {
-        Stream GetCurrentDescriptorContent();
-
-        Stream GetDescriptorContentById(ulong num);
+        IContentReader GetCurrentDescriptorContent();
 
         IContentReader GetTableContentById(ulong num);
     }

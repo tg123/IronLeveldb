@@ -4,27 +4,29 @@ namespace IronLeveldb.Storage
 {
     public class StreamContentReader : IContentReader
     {
-        private readonly BinaryReader _br;
-
         private readonly object _lock = new object();
         private readonly Stream _stream;
 
         public StreamContentReader(Stream stream)
         {
             _stream = stream;
-            _br = new BinaryReader(stream);
+            ContentLength = stream.Length;
         }
 
-        public long ContentLength => _stream.Length;
+        public long ContentLength { get; }
 
-        public byte[] ReadContent(long offset, long size)
+        public int ReadContentInto(long pos, byte[] buffer, int offset, int size)
         {
             lock (_lock)
             {
-                _stream.Position = offset;
-                // TODO cast
-                return _br.ReadBytes((int) size);
+                _stream.Position = pos;
+                return _stream.Read(buffer, offset, size);
             }
+        }
+
+        public void Dispose()
+        {
+            _stream?.Dispose();
         }
     }
 }

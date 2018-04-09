@@ -22,13 +22,12 @@ namespace IronLeveldb.Storage.FileSystem
             _fileSystemFileNameMaker = new FileSystemFileNameMaker(path);
         }
 
-        public Stream GetCurrentDescriptorContent()
+        public IContentReader GetCurrentDescriptorContent()
         {
             if (_disposed)
             {
                 throw new ObjectDisposedException(nameof(ReadonlyFileSystemStorage));
             }
-
 
             var current = File.ReadLines(_fileSystemFileNameMaker.CurrentFileName()).FirstOrDefault()?.Trim();
 
@@ -38,20 +37,7 @@ namespace IronLeveldb.Storage.FileSystem
                 throw new InvalidDataException("bad CURRENT file");
             }
 
-            return RegisterForDispose(File.Open(_fileSystemFileNameMaker.FullPath(current), FileMode.Open));
-        }
-
-        public Stream GetDescriptorContentById(ulong num)
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(ReadonlyFileSystemStorage));
-            }
-
-            // TODO should not open twice
-            return RegisterForDispose(File.Open(_fileSystemFileNameMaker.DescriptorFileName(num), FileMode.Open,
-                FileAccess.Read,
-                FileShare.Read));
+            return new StreamContentReader(OpenRead(_fileSystemFileNameMaker.FullPath(current)));
         }
 
         public IContentReader GetTableContentById(ulong num)
@@ -61,7 +47,7 @@ namespace IronLeveldb.Storage.FileSystem
                 throw new ObjectDisposedException(nameof(ReadonlyFileSystemStorage));
             }
 
-            return new StreamContentReader(OpenMmap(_fileSystemFileNameMaker.TableFileName(num)));
+            return new StreamContentReader(OpenRead(_fileSystemFileNameMaker.TableFileName(num)));
         }
 
         public void Dispose()
@@ -76,8 +62,7 @@ namespace IronLeveldb.Storage.FileSystem
             var cs = new List<Exception>();
             for (;;)
             {
-                WeakReference<IDisposable> streamRef;
-                if (!_opened.TryTake(out streamRef))
+                if (!_opened.TryTake(out var streamRef))
                 {
                     if (cs.Count > 1)
                     {
@@ -92,8 +77,7 @@ namespace IronLeveldb.Storage.FileSystem
                     break;
                 }
 
-                IDisposable stream;
-                if (streamRef.TryGetTarget(out stream))
+                if (streamRef.TryGetTarget(out var stream))
                 {
                     try
                     {
@@ -107,9 +91,10 @@ namespace IronLeveldb.Storage.FileSystem
             }
         }
 
-        private Stream OpenMmap(string file) // TODO change name
+        private Stream OpenRead(string file)
         {
             return RegisterForDispose(File.OpenRead(file));
+            // TODO mmap
 //            var len = new FileInfo(file).Length;
 //            var memoryMappedFile = RegisterForDispose(MemoryMappedFile.CreateFromFile(file, FileMode.Open));
 //            return RegisterForDispose(memoryMappedFile.CreateViewStream(0, len, MemoryMappedFileAccess.Read));

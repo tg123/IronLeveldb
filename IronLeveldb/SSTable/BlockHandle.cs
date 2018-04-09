@@ -5,7 +5,7 @@ namespace IronLeveldb.SSTable
     internal class BlockHandle
     {
         // TODO ulong in leveldb
-        internal const long MaxEncodedLength = 10 + 10;
+        internal const int MaxEncodedLength = 10 + 10;
 
         internal BlockHandle(long offset, long size)
         {

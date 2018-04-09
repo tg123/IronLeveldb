@@ -1,26 +1,24 @@
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace IronLeveldb.Storage.AzureBlob
 {
     public class AzureBlobFolderStorage : IIronLeveldbStorge
     {
-        private readonly CloudBlobDirectory[] _folders;
+        private readonly CloudBlobDirectory _folder;
 
-        public AzureBlobFolderStorage(CloudBlobDirectory folder, IEnumerable<CloudBlobDirectory> mirrors = null)
+        public AzureBlobFolderStorage(CloudBlobDirectory folder)
         {
-            _folders = new[] {folder}.Concat(mirrors ?? Enumerable.Empty<CloudBlobDirectory>()).ToArray();
+            _folder = folder;
         }
 
         public void Dispose()
         {
         }
 
-        public Stream GetCurrentDescriptorContent()
+        public IContentReader GetCurrentDescriptorContent()
         {
-            var current = _folders[0].GetBlockBlobReference(FileNameMaker.CurrentFileName()).DownloadTextAsync().Result
+            var current = _folder.GetBlockBlobReference(FileNameMaker.CurrentFileName()).DownloadTextAsync().Result
                 .Trim();
 
             if (string.IsNullOrEmpty(current))
@@ -28,42 +26,33 @@ namespace IronLeveldb.Storage.AzureBlob
                 throw new InvalidDataException("bad CURRENT file");
             }
 
-            return _folders[0].GetBlockBlobReference(current).OpenReadAsync().Result;
-        }
-
-        public Stream GetDescriptorContentById(ulong num)
-        {
-            return _folders[0].GetBlockBlobReference(FileNameMaker.DescriptorFileName(num)).OpenReadAsync().Result;
+            return new StreamContentReader(_folder.GetBlockBlobReference(current).OpenReadAsync().Result);
         }
 
         public IContentReader GetTableContentById(ulong num)
         {
-            return new BlockBlobContentReader(
-                _folders.Select(f => f.GetBlockBlobReference(FileNameMaker.TableFileName(num))).ToArray());
+            return new BlockBlobContentReader(_folder.GetBlockBlobReference(FileNameMaker.TableFileName(num)));
         }
 
         private class BlockBlobContentReader : IContentReader
         {
-            private readonly CloudBlockBlob[] _blobs;
+            private readonly CloudBlockBlob _blob;
 
-            private uint _rrid;
-
-            public BlockBlobContentReader(CloudBlockBlob[] blobs)
+            public BlockBlobContentReader(CloudBlockBlob blob)
             {
-                _blobs = blobs;
-                blobs[0].FetchAttributesAsync().Wait();
-                ContentLength = blobs[0].Properties.Length;
+                _blob = blob;
+                blob.FetchAttributesAsync().Wait();
+                ContentLength = blob.Properties.Length;
             }
 
             public long ContentLength { get; }
-
-            public byte[] ReadContent(long offset, long size)
+            public int ReadContentInto(long pos, byte[] buffer, int offset, int size)
             {
-                var buff = new byte[size];
-                // TODO add policy
-                _blobs[_rrid++ % _blobs.Length].DownloadRangeToByteArrayAsync(buff, 0, offset, size)
-                    .Wait(); // TODO dont block
-                return buff;
+                return _blob.DownloadRangeToByteArrayAsync(buffer, offset, pos, size).Result;
+            }
+
+            public void Dispose()
+            {
             }
         }
     }

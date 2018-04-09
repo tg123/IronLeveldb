@@ -10,7 +10,7 @@ namespace IronLeveldb.SSTable
         // and taking the leading 64 bits.
         private const ulong TableMagicNumber = 0xdb4775248b80fb57ul;
 
-        public const long EncodedLength = BlockHandle.MaxEncodedLength * 2 + sizeof(long);
+        public const int EncodedLength = BlockHandle.MaxEncodedLength * 2 + sizeof(long);
 
         public Footer(Stream stream)
         {

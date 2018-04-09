@@ -6,6 +6,7 @@ using IronLeveldb.DB;
 using IronLeveldb.SSTable;
 using IronLeveldb.Storage;
 using IronLeveldb.Storage.FileSystem;
+using Version = IronLeveldb.DB.Version;
 
 namespace IronLeveldb
 {
@@ -14,11 +15,11 @@ namespace IronLeveldb
         public static IIronLeveldb Build(this IIronLeveldbOptions options)
         {
             var storge = options.Storge;
-            var manifestStream = storge.GetCurrentDescriptorContent();
+            var manifestContent = storge.GetCurrentDescriptorContent();
 
             // TODO base version
-            var b = new DB.Version.Builder(options, null);
-            using (manifestStream)
+            var b = new Version.Builder(options, null);
+            using (var manifestStream = manifestContent.AsStream())
             {
                 foreach (var stream in new RecoverLogRecordsStream(manifestStream))
                 {
