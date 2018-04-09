@@ -20,13 +20,15 @@ namespace IronLeveldb.DB
 
         private readonly InternalKeyComparer _internalKeyComparer;
 
+        private readonly IIronLeveldbStorge _storge;
         private readonly IIronLeveldbOptions _options;
 
         private List<FileMetaData> _level0 = new List<FileMetaData>();
         private List<FileMetaData> _level1AndLarger = new List<FileMetaData>();
 
-        private Version(IIronLeveldbOptions options)
+        private Version(IIronLeveldbStorge storge, IIronLeveldbOptions options)
         {
+            _storge = storge;
             _options = options;
             _internalKeyComparer = new InternalKeyComparer(options.Comparer);
             _internalComparer = Comparer<InternalIByteArrayKeyValuePair>.Create(
@@ -109,7 +111,7 @@ namespace IronLeveldb.DB
             var table = _cache.Lookup<Table>(_cacheId, cacheKey);
             if (table == null)
             {
-                var contentReader = _options.Storge.GetTableContentById(file.Number);
+                var contentReader = _storge.GetTableContentById(file.Number);
 
                 table = new Table(contentReader, _options.BlockCache, _internalKeyComparer);
                 _cache.Insert(_cacheId, cacheKey, table);
@@ -125,12 +127,13 @@ namespace IronLeveldb.DB
             private readonly InternalKeyComparer _internalKeyComparer;
 
             private readonly LevelState[] _levels;
-
+            
             private readonly IIronLeveldbOptions _options;
+            private readonly IIronLeveldbStorge _storge;
 
-
-            public Builder(IIronLeveldbOptions options, Version baseVersion)
+            public Builder(IIronLeveldbStorge storge, IIronLeveldbOptions options, Version baseVersion)
             {
+                _storge = storge;
                 _options = options;
                 _baseVersion = baseVersion;
                 _internalKeyComparer = new InternalKeyComparer(options.Comparer);
@@ -168,7 +171,7 @@ namespace IronLeveldb.DB
 
             public Version Build()
             {
-                var v = new Version(_options);
+                var v = new Version(_storge, _options);
                 for (var level = 0; level < Config.NumLevels; level++)
                 {
                     // TODO Add all smaller files listed in base_

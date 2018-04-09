@@ -3,7 +3,6 @@ namespace IronLeveldb
     public interface IIronLeveldbOptions
     {
         IKeyComparer Comparer { get; }
-        IIronLeveldbStorge Storge { get; }
 
         ICache TableCache { get; }
 

@@ -67,7 +67,6 @@ namespace IronLeveldb
             {
                 var len = _reader.ReadContentInto(Position, buffer, offset, count);
                 Position += len;
-                Console.WriteLine(Position);
                 return len;
             }
 

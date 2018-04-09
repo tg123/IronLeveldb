@@ -12,13 +12,17 @@ namespace IronLeveldb
 {
     public static class IronLeveldbBuilder
     {
-        public static IIronLeveldb Build(this IIronLeveldbOptions options)
+        public static IIronLeveldb Build(this IIronLeveldbStorge storge)
         {
-            var storge = options.Storge;
+            return Build(storge, new DefaultIronLeveldbOptions());
+        }
+
+        public static IIronLeveldb Build(this IIronLeveldbStorge storge, IIronLeveldbOptions options)
+        {
             var manifestContent = storge.GetCurrentDescriptorContent();
 
             // TODO base version
-            var b = new Version.Builder(options, null);
+            var b = new Version.Builder(storge, options, null);
             using (var manifestStream = manifestContent.AsStream())
             {
                 foreach (var stream in new RecoverLogRecordsStream(manifestStream))
@@ -63,18 +67,18 @@ namespace IronLeveldb
             });
         }
 
-        public static IIronLeveldb BuildFromPath(IIronLeveldbOptions options, string path)
+        public static IIronLeveldb BuildFromPath(string path, IIronLeveldbOptions options)
         {
-            return Build(new OverwrittingStorageIronLeveldbOptions(options, new ReadonlyFileSystemStorage(path)));
+            return Build(new ReadonlyFileSystemStorage(path), options);
         }
 
         public static IIronLeveldb BuildFromPath(string path)
         {
-            return BuildFromPath(new IronLeveldbOptions(), path);
+            return BuildFromPath(path, new DefaultIronLeveldbOptions());
         }
 
 
-        public static IIronLeveldb BuildFromSingleTable(IIronLeveldbOptions options, Stream stream)
+        public static IIronLeveldb BuildFromSingleTable(Stream stream, IIronLeveldbOptions options)
         {
             var table = new Table(new StreamContentReader(stream), options.BlockCache,
                 new InternalKeyComparer(options.Comparer));
@@ -83,34 +87,15 @@ namespace IronLeveldb
 
         public static IIronLeveldb BuildFromSingleTable(Stream stream)
         {
-            return BuildFromSingleTable(new IronLeveldbOptions(), stream);
+            return BuildFromSingleTable(stream, new DefaultIronLeveldbOptions());
         }
 
         public static IIronLeveldb BuildFromSingleTable(Stream stream, ICache blockCache)
         {
-            return BuildFromSingleTable(new IronLeveldbOptions
+            return BuildFromSingleTable(stream, new DefaultIronLeveldbOptions
             {
                 BlockCache = blockCache
-            }, stream);
-        }
-
-        private class OverwrittingStorageIronLeveldbOptions : IIronLeveldbOptions
-        {
-            private readonly IIronLeveldbOptions _options;
-
-            public OverwrittingStorageIronLeveldbOptions(IIronLeveldbOptions options, IIronLeveldbStorge storge)
-            {
-                _options = options;
-                Storge = storge;
-            }
-
-            public IKeyComparer Comparer => _options.Comparer;
-
-            public IIronLeveldbStorge Storge { get; }
-
-            public ICache TableCache => _options.TableCache;
-
-            public ICache BlockCache => _options.BlockCache;
+            });
         }
     }
 }
