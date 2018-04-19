@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IronLeveldb.Storage.Mmap\IronLeveldb.Storage.Mmap.csproj" />
     <ProjectReference Include="..\IronLeveldb\IronLeveldb.csproj" />
   </ItemGroup>
 

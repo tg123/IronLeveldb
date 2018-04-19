@@ -1,6 +1,6 @@
 namespace IronLeveldb.Storage.FileSystem
 {
-    internal class FileSystemFileNameMaker
+    public class FileSystemFileNameMaker
     {
         public FileSystemFileNameMaker(string path)
         {

@@ -55,7 +55,7 @@ namespace IronLeveldb
                     es.Add(e);
                 }
 
-                if (es.Count == 2)
+                if (es.Count > 1)
                 {
                     throw new AggregateException(es);
                 }

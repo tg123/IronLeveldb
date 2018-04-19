@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using LevelDB;
@@ -33,7 +34,7 @@ namespace IronLeveldb.Test
                 {
                 }
 
-                using (var db = IronLeveldbBuilder.BuildFromPath(dbpath))
+                using (var db = CreateIronLeveldb(dbpath))
                 {
                     Assert.AreEqual("v9", db.GetAsString("k9"));
 
@@ -58,6 +59,11 @@ namespace IronLeveldb.Test
             {
                 Directory.Delete(dbpath, true);
             }
+        }
+
+        protected virtual IIronLeveldb CreateIronLeveldb(string dbpath)
+        {
+            return IronLeveldbBuilder.BuildFromPath(dbpath);
         }
 
         [TestMethod]
@@ -93,7 +99,7 @@ namespace IronLeveldb.Test
                 {
                 }
 
-                using (var db = IronLeveldbBuilder.BuildFromPath(dbpath))
+                using (var db = CreateIronLeveldb(dbpath))
                 {
                     Assert.IsTrue(db.SeekFirst()
                         .Select(kv => $"{kv.KeyAsString()} - {kv.ValueAsString()}")
@@ -152,7 +158,7 @@ namespace IronLeveldb.Test
                 {
                 }
 
-                using (var db = IronLeveldbBuilder.BuildFromPath(dbpath))
+                using (var db = CreateIronLeveldb(dbpath))
                 {
                     Assert.IsTrue(db.SeekFirst()
                         .Select(kv => $"{kv.KeyAsString()} - {kv.ValueAsString()}")
@@ -211,7 +217,7 @@ namespace IronLeveldb.Test
                 }
 
 
-                using (var db = IronLeveldbBuilder.BuildFromPath(dbpath))
+                using (var db = CreateIronLeveldb(dbpath))
                 {
                     Assert.IsTrue(db.SeekFirst()
                         .Select(kv => $"{kv.KeyAsString()} - {kv.ValueAsString()}")
