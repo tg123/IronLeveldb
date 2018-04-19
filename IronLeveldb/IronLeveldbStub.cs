@@ -11,7 +11,7 @@ namespace IronLeveldb
         private readonly ISeekable<InternalKey, InternalIByteArrayKeyValuePair> _dataProvider;
         private readonly Action _onDispose;
 
-        public IronLeveldbStub(IIronLeveldbOptions options,
+        public IronLeveldbStub(IronLeveldbOptions options,
             ISeekable<InternalKey, InternalIByteArrayKeyValuePair> dataProvider, Action onDispose = null)
         {
             _dataProvider = dataProvider;

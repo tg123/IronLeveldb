@@ -14,10 +14,10 @@ namespace IronLeveldb
     {
         public static IIronLeveldb Build(this IIronLeveldbStorge storge)
         {
-            return Build(storge, new DefaultIronLeveldbOptions());
+            return Build(storge, new IronLeveldbOptions());
         }
 
-        public static IIronLeveldb Build(this IIronLeveldbStorge storge, IIronLeveldbOptions options)
+        public static IIronLeveldb Build(this IIronLeveldbStorge storge, IronLeveldbOptions options)
         {
             var manifestContent = storge.GetCurrentDescriptorContent();
 
@@ -67,32 +67,32 @@ namespace IronLeveldb
             });
         }
 
-        public static IIronLeveldb BuildFromPath(string path, IIronLeveldbOptions options)
+        public static IIronLeveldb BuildFromPath(string path, IronLeveldbOptions options)
         {
             return Build(new ReadonlyFileSystemStorage(path), options);
         }
 
         public static IIronLeveldb BuildFromPath(string path)
         {
-            return BuildFromPath(path, new DefaultIronLeveldbOptions());
+            return BuildFromPath(path, new IronLeveldbOptions());
         }
 
 
-        public static IIronLeveldb BuildFromSingleTable(Stream stream, IIronLeveldbOptions options)
+        public static IIronLeveldb BuildFromSingleTable(Stream stream, IronLeveldbOptions options)
         {
             var table = new Table(new StreamContentReader(stream), options.BlockCache,
-                new InternalKeyComparer(options.Comparer));
+                new InternalKeyComparer(options.Comparer), options.SnappyDecompressor);
             return new IronLeveldbStub(options, table, stream.Dispose);
         }
 
         public static IIronLeveldb BuildFromSingleTable(Stream stream)
         {
-            return BuildFromSingleTable(stream, new DefaultIronLeveldbOptions());
+            return BuildFromSingleTable(stream, new IronLeveldbOptions());
         }
 
         public static IIronLeveldb BuildFromSingleTable(Stream stream, ICache blockCache)
         {
-            return BuildFromSingleTable(stream, new DefaultIronLeveldbOptions
+            return BuildFromSingleTable(stream, new IronLeveldbOptions
             {
                 BlockCache = blockCache
             });

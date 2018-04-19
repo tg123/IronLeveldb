@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Google.Protobuf;
 
@@ -12,22 +13,16 @@ namespace IronLeveldb.SSTable
 
         public const int EncodedLength = BlockHandle.MaxEncodedLength * 2 + sizeof(long);
 
-        public Footer(Stream stream)
+        public Footer(byte[] footerContent)
         {
-            var pos = stream.Position;
-            stream.Seek(EncodedLength - sizeof(long), SeekOrigin.Current);
-            var pb = new CodedInputStream(stream);
-
-            // TODO BitConverter.IsLittleEndian == true
-            var magic = pb.ReadFixed64();
+            var magic = BitConverter.ToUInt64(footerContent, EncodedLength - sizeof(long));
 
             if (magic != TableMagicNumber)
             {
                 throw new InvalidDataException("not an sstable (bad magic number)");
             }
 
-            stream.Position = pos;
-
+            var pb = new CodedInputStream(footerContent);
             MetaIndexHandle = new BlockHandle(pb);
             IndexHandle = new BlockHandle(pb);
         }

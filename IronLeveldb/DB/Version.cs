@@ -21,12 +21,12 @@ namespace IronLeveldb.DB
         private readonly InternalKeyComparer _internalKeyComparer;
 
         private readonly IIronLeveldbStorge _storge;
-        private readonly IIronLeveldbOptions _options;
+        private readonly IronLeveldbOptions _options;
 
         private List<FileMetaData> _level0 = new List<FileMetaData>();
         private List<FileMetaData> _level1AndLarger = new List<FileMetaData>();
 
-        private Version(IIronLeveldbStorge storge, IIronLeveldbOptions options)
+        private Version(IIronLeveldbStorge storge, IronLeveldbOptions options)
         {
             _storge = storge;
             _options = options;
@@ -113,7 +113,7 @@ namespace IronLeveldb.DB
             {
                 var contentReader = _storge.GetTableContentById(file.Number);
 
-                table = new Table(contentReader, _options.BlockCache, _internalKeyComparer);
+                table = new Table(contentReader, _options.BlockCache, _internalKeyComparer, _options.SnappyDecompressor);
                 _cache.Insert(_cacheId, cacheKey, table);
             }
 
@@ -128,10 +128,10 @@ namespace IronLeveldb.DB
 
             private readonly LevelState[] _levels;
             
-            private readonly IIronLeveldbOptions _options;
+            private readonly IronLeveldbOptions _options;
             private readonly IIronLeveldbStorge _storge;
 
-            public Builder(IIronLeveldbStorge storge, IIronLeveldbOptions options, Version baseVersion)
+            public Builder(IIronLeveldbStorge storge, IronLeveldbOptions options, Version baseVersion)
             {
                 _storge = storge;
                 _options = options;
