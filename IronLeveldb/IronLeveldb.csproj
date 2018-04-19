@@ -16,9 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Crc32.NET" Version="1.2.0" />
     <PackageReference Include="Google.Protobuf" Version="3.4.1" />
     <PackageReference Include="Snappy.Sharp" Version="1.0.0" />
   </ItemGroup>
-
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <PackageReference Include="Snappy.NET" Version="1.1.1.8" />
+  </ItemGroup>
 
 </Project>

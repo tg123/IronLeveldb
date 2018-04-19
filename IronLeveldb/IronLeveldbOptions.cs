@@ -1,4 +1,5 @@
 using IronLeveldb.Cache.LRU;
+using IronLeveldb.Snappy;
 
 namespace IronLeveldb
 {
@@ -12,5 +13,10 @@ namespace IronLeveldb
         public ICache BlockCache { get; set; } = new LruCache(8 * 1024 * 1024);
 
         public ISnappyDecompressor SnappyDecompressor { get; set; }
+#if NET45
+            = new SnappyNet();
+#else
+            = new SnappySharp();
+#endif
     }
 }
