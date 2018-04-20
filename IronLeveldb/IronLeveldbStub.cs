@@ -24,16 +24,16 @@ namespace IronLeveldb
             _onDispose?.Invoke();
         }
 
-        public IEnumerable<IReadonlyBytesKeyValuePair> Seek(IReadOnlyList<byte> key)
+        public IEnumerable<IReadonlyBytesKeyValuePair> Seek(IReadOnlyList<byte> key, ReadOptions options)
         {
             // TODO snapshot is not support, use ulong.MaxValue (smallest) instead
             var interkey = new InternalKey(key.ToArray(), InternalKey.MaxSequenceNumber, InternalKey.ValueTypeForSeek);
-            return FilterDeleted(_dataProvider.Seek(interkey));
+            return FilterDeleted(_dataProvider.Seek(interkey, options));
         }
 
-        public IEnumerable<IReadonlyBytesKeyValuePair> SeekFirst()
+        public IEnumerable<IReadonlyBytesKeyValuePair> SeekFirst(ReadOptions options)
         {
-            return FilterDeleted(_dataProvider.SeekFirst());
+            return FilterDeleted(_dataProvider.SeekFirst(options));
         }
 
         private IEnumerable<InternalIByteArrayKeyValuePair> FilterDeleted(

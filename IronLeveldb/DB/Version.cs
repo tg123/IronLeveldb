@@ -17,11 +17,9 @@ namespace IronLeveldb.DB
             .Select(_ => new List<FileMetaData>()).ToArray();
 
         private readonly IComparer<InternalIByteArrayKeyValuePair> _internalComparer;
-
-        private readonly InternalKeyComparer _internalKeyComparer;
+        private readonly IronLeveldbOptions _options;
 
         private readonly IIronLeveldbStorge _storge;
-        private readonly IronLeveldbOptions _options;
 
         private List<FileMetaData> _level0 = new List<FileMetaData>();
         private List<FileMetaData> _level1AndLarger = new List<FileMetaData>();
@@ -30,9 +28,8 @@ namespace IronLeveldb.DB
         {
             _storge = storge;
             _options = options;
-            _internalKeyComparer = new InternalKeyComparer(options.Comparer);
             _internalComparer = Comparer<InternalIByteArrayKeyValuePair>.Create(
-                (a, b) => _internalKeyComparer.Compare(a.InternalKey, b.InternalKey));
+                (a, b) => options.InternalKeyComparer.Compare(a.InternalKey, b.InternalKey));
 
             _cacheId = IdGenerator.NewId();
 
@@ -49,29 +46,29 @@ namespace IronLeveldb.DB
             }
         }
 
-        public IEnumerable<InternalIByteArrayKeyValuePair> Seek(InternalKey key)
+        public IEnumerable<InternalIByteArrayKeyValuePair> Seek(InternalKey key, ReadOptions options)
         {
             // TODO only seek level0 and overlaps
             var entries = _level0.Concat(_level1AndLarger)
-                .Where(f => _internalKeyComparer.Compare(key, f.Largest) <= 0)
+                .Where(f => _options.InternalKeyComparer.Compare(key, f.Largest) <= 0)
                 .Select(f =>
                 {
                     // key < smallest
-                    if (_internalKeyComparer.Compare(key, f.Smallest) <= 0)
+                    if (_options.InternalKeyComparer.Compare(key, f.Smallest) <= 0)
                     {
-                        return ToTable(f).SeekFirst();
+                        return ToTable(f).SeekFirst(options);
                     }
 
-                    return ToTable(f).Seek(key);
+                    return ToTable(f).Seek(key, options);
                 });
 
             return Merge(entries);
         }
 
-        public IEnumerable<InternalIByteArrayKeyValuePair> SeekFirst()
+        public IEnumerable<InternalIByteArrayKeyValuePair> SeekFirst(ReadOptions options)
         {
             var entries = _level0.Concat(_level1AndLarger)
-                .Select(ToTable).Select(t => t.SeekFirst());
+                .Select(ToTable).Select(t => t.SeekFirst(options));
 
             return Merge(entries);
         }
@@ -113,7 +110,7 @@ namespace IronLeveldb.DB
             {
                 var contentReader = _storge.GetTableContentById(file.Number);
 
-                table = new Table(contentReader, _options.BlockCache, _internalKeyComparer, _options.SnappyDecompressor);
+                table = new Table(contentReader, _options);
                 _cache.Insert(_cacheId, cacheKey, table);
             }
 
@@ -127,7 +124,7 @@ namespace IronLeveldb.DB
             private readonly InternalKeyComparer _internalKeyComparer;
 
             private readonly LevelState[] _levels;
-            
+
             private readonly IronLeveldbOptions _options;
             private readonly IIronLeveldbStorge _storge;
 

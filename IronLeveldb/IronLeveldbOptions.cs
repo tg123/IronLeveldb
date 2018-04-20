@@ -1,11 +1,29 @@
 using IronLeveldb.Cache.LRU;
+using IronLeveldb.DB;
 using IronLeveldb.Snappy;
 
 namespace IronLeveldb
 {
     public class IronLeveldbOptions
     {
-        public IKeyComparer Comparer { get; set; } = LeveldbDefaultKeyComparer.Comparer;
+        private IKeyComparer _comparer;
+
+        public IronLeveldbOptions()
+        {
+            Comparer = LeveldbDefaultKeyComparer.Comparer;
+        }
+
+        internal InternalKeyComparer InternalKeyComparer { get; private set; }
+
+        public IKeyComparer Comparer
+        {
+            get => _comparer;
+            set
+            {
+                _comparer = value;
+                InternalKeyComparer = new InternalKeyComparer(_comparer);
+            }
+        }
 
         // TODO better default cache
         public ICache TableCache { get; set; } = new LruCache(2 * 1024 * 1024 * 100); // max_openfile 100
@@ -18,5 +36,7 @@ namespace IronLeveldb
 #else
             = new SnappySharp();
 #endif
+
+        public bool ParanoidChecks { get; set; } = false;
     }
 }

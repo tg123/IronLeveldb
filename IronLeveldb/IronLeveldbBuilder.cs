@@ -80,8 +80,7 @@ namespace IronLeveldb
 
         public static IIronLeveldb BuildFromSingleTable(Stream stream, IronLeveldbOptions options)
         {
-            var table = new Table(new StreamContentReader(stream), options.BlockCache,
-                new InternalKeyComparer(options.Comparer), options.SnappyDecompressor);
+            var table = new Table(new StreamContentReader(stream), options);
             return new IronLeveldbStub(options, table, stream.Dispose);
         }
 

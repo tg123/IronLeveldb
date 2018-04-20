@@ -48,7 +48,7 @@ namespace IronLeveldb.SSTable
 
         public long Charge => _data.Length;
 
-        public IEnumerable<InternalIByteArrayKeyValuePair> Seek(InternalKey target)
+        public IEnumerable<InternalIByteArrayKeyValuePair> Seek(InternalKey target, ReadOptions options)
         {
             var left = 0;
             var right = _numRestarts - 1;
@@ -83,7 +83,7 @@ namespace IronLeveldb.SSTable
             return SeekToRestartPoint(left).SkipWhile(kv => _comparer.Compare(kv.InternalKey, target) < 0);
         }
 
-        public IEnumerable<InternalIByteArrayKeyValuePair> SeekFirst()
+        public IEnumerable<InternalIByteArrayKeyValuePair> SeekFirst(ReadOptions options)
         {
             return SeekToRestartPoint(0);
         }

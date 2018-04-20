@@ -46,6 +46,7 @@ namespace IronLeveldb.Storage.AzureBlob
             }
 
             public long ContentLength { get; }
+
             public int ReadContentInto(long pos, byte[] buffer, int offset, int size)
             {
                 return _blob.DownloadRangeToByteArrayAsync(buffer, offset, pos, size).Result;

@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using LevelDB;
@@ -63,7 +62,10 @@ namespace IronLeveldb.Test
 
         protected virtual IIronLeveldb CreateIronLeveldb(string dbpath)
         {
-            return IronLeveldbBuilder.BuildFromPath(dbpath);
+            return IronLeveldbBuilder.BuildFromPath(dbpath, new IronLeveldbOptions
+            {
+                ParanoidChecks = true
+            });
         }
 
         [TestMethod]
