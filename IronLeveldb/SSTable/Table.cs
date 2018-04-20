@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Force.Crc32;
 using Google.Protobuf;
 using IronLeveldb.Cache;
 using IronLeveldb.Cache.LRU;
@@ -97,36 +96,8 @@ namespace IronLeveldb.SSTable
 
             if (verifyChecksums)
             {
-                /*
-                static const uint32_t kMaskDelta = 0xa282ead8ul;
-
-                // Return a masked representation of crc.
-                //
-                // Motivation: it is problematic to compute the CRC of a string that
-                // contains embedded CRCs.  Therefore we recommend that CRCs stored
-                // somewhere (e.g., in files) should be masked before being stored.
-                inline uint32_t Mask(uint32_t crc) {
-                    // Rotate right by 15 bits and add a constant.
-                    return ((crc >> 15) | (crc << 17)) + kMaskDelta;
-                }
-
-                // Return the crc whose masked representation is masked_crc.
-                inline uint32_t Unmask(uint32_t masked_crc) {
-                    uint32_t rot = masked_crc - kMaskDelta;
-                    return ((rot >> 17) | (rot << 15));
-                }
-                */
-
-                uint Unmask(uint maskedCrc)
-                {
-                    const uint kMaskDelta = 0xa282ead8;
-
-                    var rot = maskedCrc - kMaskDelta;
-                    return (rot >> 17) | (rot << 15);
-                }
-
-                var crc = Unmask(BitConverter.ToUInt32(data, n + 1));
-                var actual = Crc32CAlgorithm.Compute(data, 0, n + 1);
+                var crc = Crc32.ReadUnmaskCrc(data, n + 1);
+                var actual = Crc32.Value(data, 0, n + 1);
 
                 if (crc != actual)
                 {

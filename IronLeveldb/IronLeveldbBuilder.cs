@@ -25,7 +25,7 @@ namespace IronLeveldb
             var b = new Version.Builder(storge, options, null);
             using (var manifestStream = manifestContent.AsStream())
             {
-                foreach (var stream in new RecoverLogRecordsStream(manifestStream))
+                foreach (var stream in new RecoverLogRecordsStream(manifestStream, true))
                 {
                     var versionEdit = VersionEdit.DecodeFrom(stream);
 
