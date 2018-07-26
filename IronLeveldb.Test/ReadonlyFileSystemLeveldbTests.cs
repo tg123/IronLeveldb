@@ -16,20 +16,20 @@ namespace IronLeveldb.Test
 
             try
             {
-                using (var db = LevelDB.DB.Open(dbpath, new Options
+                using (var db = new LevelDB.DB(new Options
                 {
                     CreateIfMissing = true,
-                    WriteBufferSize = ulong.MaxValue
-                }))
+                    WriteBufferSize = long.MaxValue
+                }, dbpath))
                 {
                     for (var i = 0; i < 10; i++)
                     {
-                        db.Put(new WriteOptions(), "k" + i, "v" + i);
+                        db.Put("k" + i, "v" + i);
                     }
                 }
 
                 // force leveldb to flush and recover log
-                using (LevelDB.DB.Open(dbpath, new Options()))
+                using (new LevelDB.DB(new Options(), dbpath))
                 {
                 }
 
@@ -76,28 +76,28 @@ namespace IronLeveldb.Test
 
             try
             {
-                using (var db = LevelDB.DB.Open(dbpath, new Options
+                using (var db = new LevelDB.DB(new Options
                 {
                     CreateIfMissing = true,
-                    WriteBufferSize = ulong.MaxValue
-                }))
+                    WriteBufferSize = long.MaxValue
+                }, dbpath))
                 {
                     for (var i = 0; i < 10; i++)
                     {
-                        db.Put(new WriteOptions(), "k" + i, "v" + i);
+                        db.Put( "k" + i, "v" + i);
                     }
                 }
 
-                using (var db = LevelDB.DB.Open(dbpath, new Options()))
+                using (var db = new LevelDB.DB(new Options(), dbpath))
                 {
                     for (var i = 0; i < 10; i++)
                     {
-                        db.Put(new WriteOptions(), "k" + i, "vv" + i);
+                        db.Put("k" + i, "vv" + i);
                     }
                 }
 
                 // force leveldb to flush and recover log
-                using (LevelDB.DB.Open(dbpath, new Options()))
+                using (new LevelDB.DB(new Options(), dbpath))
                 {
                 }
 
@@ -135,28 +135,28 @@ namespace IronLeveldb.Test
 
             try
             {
-                using (var db = LevelDB.DB.Open(dbpath, new Options
+                using (var db = new LevelDB.DB(new Options
                 {
                     CreateIfMissing = true,
-                    WriteBufferSize = ulong.MaxValue
-                }))
+                    WriteBufferSize = long.MaxValue
+                }, dbpath))
                 {
                     for (var i = 0; i < 10; i++)
                     {
-                        db.Put(new WriteOptions(), "k" + i, "v" + i);
+                        db.Put("k" + i, "v" + i);
                     }
                 }
 
-                using (var db = LevelDB.DB.Open(dbpath, new Options()))
+                using (var db = new LevelDB.DB(new Options(), dbpath))
                 {
                     for (var i = 5; i < 10; i++)
                     {
-                        db.Delete(new WriteOptions(), "k" + i);
+                        db.Delete("k" + i);
                     }
                 }
 
                 // force leveldb to flush
-                using (LevelDB.DB.Open(dbpath, new Options()))
+                using (new LevelDB.DB(new Options(), dbpath))
                 {
                 }
 
@@ -197,24 +197,24 @@ namespace IronLeveldb.Test
 
 
                 // delete again
-                using (var db = LevelDB.DB.Open(dbpath, new Options()))
+                using (var db = new LevelDB.DB(new Options(), dbpath))
                 {
                     for (var i = 0; i < 5; i++)
                     {
-                        db.Delete(new WriteOptions(), "k" + i);
+                        db.Delete("k" + i);
                     }
                 }
 
-                using (var db = LevelDB.DB.Open(dbpath, new Options()))
+                using (var db = new LevelDB.DB(new Options(), dbpath))
                 {
                     for (var i = 5; i < 10; i++)
                     {
-                        db.Put(new WriteOptions(), "k" + i, "v" + i);
+                        db.Put("k" + i, "v" + i);
                     }
                 }
 
                 // force leveldb to flush
-                using (LevelDB.DB.Open(dbpath, new Options()))
+                using (new LevelDB.DB(new Options(), dbpath))
                 {
                 }
 
