@@ -1,19 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <Authors>Boshi Lian</Authors>
     <Company />
     <Product />
     <Description>A leveldb implementation in C#</Description>
-    <PackageLicenseUrl>https://github.com/tg123/IronLeveldb/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/tg123/IronLeveldb</PackageProjectUrl>
     <RepositoryUrl>https://github.com/tg123/IronLeveldb</RepositoryUrl>
     <PackageTags>leveldb azure blob</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WindowsAzure.Storage" Version="9.1.1" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.21.2" />
   </ItemGroup>
 
   <ItemGroup>

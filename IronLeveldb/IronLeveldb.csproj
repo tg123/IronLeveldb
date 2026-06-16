@@ -1,14 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <VersionPrefix>1.1.0</VersionPrefix>
-    <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Authors>Boshi Lian</Authors>
     <Company />
     <Product />
     <Description>A leveldb implementation in C#</Description>
-    <PackageLicenseUrl>https://github.com/tg123/IronLeveldb/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/tg123/IronLeveldb</PackageProjectUrl>
     <RepositoryUrl>https://github.com/tg123/IronLeveldb</RepositoryUrl>
     <PackageTags>leveldb azure blob</PackageTags>
@@ -17,11 +18,8 @@
 
   <ItemGroup>
     <PackageReference Include="Crc32.NET" Version="1.2.0" />
-    <PackageReference Include="Google.Protobuf" Version="3.15.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.27.0" />
     <PackageReference Include="Snappy.Sharp" Version="1.0.0" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
-    <PackageReference Include="Snappy.NET" Version="1.1.1.8" />
   </ItemGroup>
 
 </Project>
